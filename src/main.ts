@@ -3,7 +3,9 @@ import * as dotenv from "dotenv";
 import * as config from "./config.js";
 import bwaa from "./commands/bwaa.js";
 import * as fish from "./commands/fish.js"
-import {buildLeaderboardEmbed} from "./commands/fish.js";
+import { buildLeaderboardEmbed } from "./commands/fish.js";
+import { type CommandCallArgs, type CommandHandler, CommandManager } from "./command_manager.js";
+import { registerAll } from "./commands/commands.js";
 
 dotenv.config({
     quiet: true
@@ -16,6 +18,9 @@ const client = new Client({
         GatewayIntentBits.MessageContent
     ]
 });
+
+const commands = new CommandManager();
+registerAll(commands);
 
 client.once("clientReady", async (): Promise<void> => {
     console.log(`Logged in as ${client.user?.tag}`);
@@ -38,45 +43,10 @@ client.on("messageCreate", async (message: Message): Promise<void> => {
     const command = args.shift()?.toLowerCase();
 
     let embed: EmbedBuilder;
-
-    switch (command) {
-        case "restart":
-            if (!isOwner) return;
-
-            await message.reply(`Restarting ${config.emotes.CERBER_LOADING}`);
-            console.log("Restart triggered by " + message.author.tag);
-            process.exit(1);
-
-        case "stop":
-            if (!isOwner) return;
-
-            await message.reply(`Stopping ${config.emotes.CERBER_LOADING}`);
-            console.log("Stop triggered by " + message.author.tag);
-            process.exit(0);
-
-        case "bwaa":
-            await bwaa(message, args);
-            break;
-
-        case "fish":
-            embed = fish.fish(message);
-            await message.reply({ embeds: [embed] });
-            break;
-
-        case "points":
-            embed = fish.getPoints(message);
-            await message.reply({ embeds: [embed] });
-            break;
-
-        case "leaderboard":
-            const rows = fish.getLeaderboard(config.LEADERBOARD_LENGTH_LIMIT);
-            embed = buildLeaderboardEmbed(rows);
-            await message.reply({ embeds: [embed] });
-            break;
-
-        default:
-            await message.reply(`Unknown command \`${config.PREFIX}${command}\``);
-            console.log("An invalid command was sent: " + message.content);
+    
+    if (!await commands.handle(command, { commandManager: commands, client, args, message, isOwner })) {
+        await message.reply(`Unknown command \`${config.PREFIX}${command}\``);
+        console.log("An invalid command was sent: " + message.content);
     }
 });
 

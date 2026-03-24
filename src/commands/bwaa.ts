@@ -1,8 +1,9 @@
+import { type CommandCallArgs } from "../command_manager.js";
 import { Message } from "discord.js";
 import * as config from "../config.js";
 import * as utils from "../utils.js";
 
-export default async function bwaa(message: Message, args: string[]): Promise<void> {
+export default async function bwaa({ args, message }: CommandCallArgs): Promise<void> {
     const bwaa =  (): string => {
         const bwaaArray = [
             config.emotes.NEURO_BWAA,

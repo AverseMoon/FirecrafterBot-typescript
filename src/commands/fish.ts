@@ -147,7 +147,7 @@ export function getLeaderboard(limit: number): UserPoints[] {
     return rows;
 }
 
-export function buildLeaderboardEmbed(rows: Array<{ userID: string, points: number }>): EmbedBuilder {
+export function buildLeaderboardEmbed(rows: Array<UserPoints>): EmbedBuilder {
     const lines = rows.map(({ userID, points }: UserPoints, index): string => {
         return `${index + 1}. **<@${userID}>** — ${points.toLocaleString()} points`
     });
@@ -157,4 +157,8 @@ export function buildLeaderboardEmbed(rows: Array<{ userID: string, points: numb
         description: lines.length > 0 ? lines.join("\n") : "N/A",
         color: config.EMBED_COLOR
     });
+}
+
+export function getLeaderboardEmbed(limit: number): EmbedBuilder {
+    return buildLeaderboardEmbed(getLeaderboard(limit))
 }
