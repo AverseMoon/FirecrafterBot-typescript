@@ -3,3 +3,9 @@ node_modules/
 dist/
 .idea/
 **/*.fish
+.TOKEN
+!start.fish
+*.service
+config.json
+storage/
+db.sqlite
