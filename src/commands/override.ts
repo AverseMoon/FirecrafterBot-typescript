@@ -1,5 +1,5 @@
 import { PermissionFlagsBits } from "discord.js";
-import type { CommandCallArgs } from "../commandManager.js";
+import type { CommandCallArgs, CommandHelpText } from "../commandManager.js";
 import config, { getUser, getGuildUser, getGuild, type GuildOverridableGlobalOptions, type UserOverridableGlobalOptions, type UserOverridableGuildOptions } from "../config.js"
 import { isNumericalString, userIdHelper } from "../utils.js";
 import { z, ZodType } from "zod";
@@ -32,7 +32,12 @@ export const overridables: Overrideables = {
     },
 };
 
-export async function override({ isOwner, hasManageServer, message, args }: CommandCallArgs, forceIfOwner?: boolean) {
+export const h: CommandHelpText = {
+    compact: "set various overrides",
+    descriptive: "wip", // TODO: make better description
+};
+
+export async function _({ isOwner, hasManageServer, message, args }: CommandCallArgs, forceIfOwner?: boolean) {
     if (isOwner && forceIfOwner)
         console.log("forced override sent from " + message.author.id)
     if (args.length == 1 && args[0] == "list")
@@ -107,4 +112,3 @@ export async function override({ isOwner, hasManageServer, message, args }: Comm
     }
     return await message.reply(`\`${args[1]}.${args[2]}\` = \`${JSON.stringify(args[0] == "user" ? (getUser(user).globalOverrides as any)[args[2]!] : args[0] == "member" ? (getGuildUser(message.guild!, user).guildOverrides as any)[args[2]!] : (getGuild(message.guild!).globalOverrides as any)[args[2]!])}\``);
 };
-export default override;

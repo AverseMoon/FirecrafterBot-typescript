@@ -39,7 +39,14 @@ client.on("messageCreate", async (message: Message): Promise<void> => {
     const perms = (await message.guild!.members.fetch({ user: message.author })).permissions;
     
     try {
-        if (!await commands.handle(command || "", { permissions: perms, hasManageServer: perms.has(PermissionFlagsBits.ManageGuild) || isOwner, commandManager: commands, client, args, message, isOwner })) {
+        if (!await commands.handle(command || "", {
+            permissions: perms,
+            hasManageServer: perms.has(PermissionFlagsBits.ManageGuild) || isOwner,
+            commandManager: commands,
+            client, args, message, isOwner,
+            commandName: command || "",
+            commandInfo: commands.commands[command||""]!,
+        })) {
             await message.reply(`Unknown command \`${c.getGlobalGuildOverridableOption("prefix", message.guild)}${command}\``);
             console.log("An invalid command was sent: " + message.content);
         }
