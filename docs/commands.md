@@ -18,6 +18,19 @@ it will just stop the process)
 Stops the bot.\
 (Only the owner of the bot can use this command)
 
+**\_save**\
+Saves the bot data.\
+(Only the owner of the bot can use this command)
+
+**\_reload**\
+Reloads the bot data.\
+(Only the owner of the bot can use this command)
+
+**\_toggleAutosave**\
+Disables/enables autosaving of the bot data.\
+(Only the owner of the bot can use this command)
+(Does not persist through restarts)
+
 **\_fish**\
 Makes the bot fish.
 
