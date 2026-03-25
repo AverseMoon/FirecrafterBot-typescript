@@ -53,8 +53,17 @@ export async function override({ isOwner, hasManageServer, message, args }: Comm
     var user = userIdHelper(args[2] == "me" ? message.author : args[2]!);
     if (args.length > 3) {
         var data: unknown;
-        if (args.length == 4 && args[3] == "reset") data = undefined;
-        else {
+        if (args.length == 4 && args[3] == "reset") switch (args[0]) {
+            case "user":
+                delete (getUser(user).globalOverrides as any)[args[2]!];
+                break;
+            case "member":
+                delete (getGuildUser(message.guild!, user).guildOverrides as any)[args[2]!];
+                break;
+            case "guild":
+                delete (getGuild(message.guild!).globalOverrides as any)[args[2]!];
+                break;
+        } else {
             try { data = JSON.parse(args.slice(3).join(" ")) } catch { return await message.reply("malformed json"); }
             if (!(isOwner && forceIfOwner)) {
                 let schema: ZodType | undefined;
