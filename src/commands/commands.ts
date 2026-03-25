@@ -46,7 +46,7 @@ function registerAll(commands: CommandManager) {
         console.log("Stop triggered by " + message.author.tag);
         saveExit(0);
     });
-    
+
     commands.registerCommand("bwaa", bwaa, "bwaa!");
     commands.registerCommand("fish", async function ({ message }) { await message.reply({ embeds: [fish.fish(message)] }); }, "this command is fishy");
     commands.registerCommand("points", async function ({ message }) { await message.reply({ embeds: [fish.getPoints(message)] }); }, "get your fishing points");

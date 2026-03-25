@@ -3,7 +3,7 @@
     "version": "1.0.0",
     "description": "A simple Discord bot",
     "scripts": {
-        "start": "./start.fish"
+        "start": "./start.fish compile"
     },
     "type": "module",
     "devDependencies": {

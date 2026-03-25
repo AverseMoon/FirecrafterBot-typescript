@@ -42,7 +42,7 @@ client.on("messageCreate", async (message: Message): Promise<void> => {
 
     let embed: EmbedBuilder;
     
-    if (!command || !await commands.handle(command, { commandManager: commands, client, args, message, isOwner })) {
+    if (!await commands.handle(command || "", { commandManager: commands, client, args, message, isOwner })) {
         await message.reply(`Unknown command \`${c.getGlobalGuildOverridableOption("prefix", message.guild)}${command}\``);
         console.log("An invalid command was sent: " + message.content);
     }
