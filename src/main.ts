@@ -37,9 +37,13 @@ client.on("messageCreate", async (message: Message): Promise<void> => {
     const args = message.content.slice(c.getGlobalGuildOverridableOption("prefix", message.guild).length).trim().split(/ +/);
     const command = args.shift();
 
-    if (!await commands.handle(command || "", { commandManager: commands, client, args, message, isOwner })) {
-        await message.reply(`Unknown command \`${c.getGlobalGuildOverridableOption("prefix", message.guild)}${command}\``);
-        console.log("An invalid command was sent: " + message.content);
+    try {
+        if (!await commands.handle(command || "", { commandManager: commands, client, args, message, isOwner })) {
+            await message.reply(`Unknown command \`${c.getGlobalGuildOverridableOption("prefix", message.guild)}${command}\``);
+            console.log("An invalid command was sent: " + message.content);
+        }
+    } catch (err) {
+        console.error(`Error while handling command \`${command}\`! (id:${message.id})\n${err}`)
     }
 });
 
